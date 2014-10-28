@@ -3,6 +3,4 @@ SELECT
   the_geom AS __geometry__,
   gid::varchar AS __id__
 FROM
-  land_polygons
-WHERE
-  the_geom && !bbox!
+  ne_50m_land

@@ -3,6 +3,6 @@ SELECT
   the_geom AS __geometry__,
   gid::varchar AS __id__
 FROM
-  ne_110m_land
+  land_polygons
 ORDER BY
   __id__ ASC
