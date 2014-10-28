@@ -4,5 +4,5 @@ SELECT
   gid::varchar AS __id__
 FROM
   ne_50m_land
-WHERE
-  the_geom && !bbox!
+ORDER BY
+  __id__ ASC
