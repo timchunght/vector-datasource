@@ -9,13 +9,18 @@ FROM planet_osm_point
 WHERE name IS NOT NULL
 
 AND place IN (
-	'city',
-	'county',
-	'province',
-	'town',
-	'neighbourhood',
-	'locality',
-	'lake'
+    'city',
+    'county',
+    'province',
+    'island',
+    'town',
+    'neighbourhood',
+    'suburb',
+    'locality',
+    'lake',
+    'village',
+    'hamlet',
+    'isolated_dwelling'
 )
 
 ORDER BY __id__ ASC
