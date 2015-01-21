@@ -17,7 +17,7 @@ FROM
     WHERE
         way && !bbox!
         AND boundary='administrative'
-        AND admin_level IN ('2', '3') -- national, disputed
+        AND admin_level IN ('2', '3', '4') -- national, disputed, state
 
     --
     -- Place Name
@@ -39,7 +39,8 @@ FROM
             'continent',
             'ocean',
             'country',
-            'sea'
+            'sea',
+            'state'
         )
         AND way && !bbox!
 

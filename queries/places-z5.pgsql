@@ -5,45 +5,43 @@ FROM
     --
     -- Place Border
     --
-    SELECT  
-    name,
-    boundary AS kind,
-    admin_level, 
-    way AS __geometry__,
-    mz_id AS __id__
-  
-    FROM planet_osm_polygon 
-    
-    WHERE way && !bbox!
+    SELECT
+        name,
+        boundary AS kind,
+        admin_level,
+        way AS __geometry__,
+        mz_id AS __id__
 
-    AND boundary='administrative' 
+    FROM planet_osm_polygon
 
-    AND admin_level = '4' -- state
+    WHERE
+        way && !bbox!
+        AND boundary='administrative'
+        AND admin_level IN ('2', '3', '4') -- national, disputed, state
 
     --
     -- Place Name
     --
     UNION
 
-    SELECT 
-      name, 
-      place AS kind,
-      NULL AS admin_level,
-      way AS __geometry__,
-      mz_id AS __id__
+    SELECT
+        name,
+        place AS kind,
+        NULL AS admin_level,
+        way AS __geometry__,
+        mz_id AS __id__
 
-    FROM planet_osm_point 
+    FROM planet_osm_point
 
-    WHERE name IS NOT NULL 
-
-    AND place IN (
-      'ocean', 
-      'country',
-      'state',
-      'sea'
-    )
-
-    AND way && !bbox!
+    WHERE
+        name IS NOT NULL
+        AND place IN (
+            'ocean',
+            'country',
+            'sea',
+            'state'
+        )
+        AND way && !bbox!
 
 ) AS places
 
