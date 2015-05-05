@@ -36,6 +36,7 @@
                 "earth",
                 "places",
                 "landuse",
+                "landuse_labels",
                 "roads",
                 "buildings",
                 "pois"
@@ -81,11 +82,14 @@
                 "MultiLineString"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id",
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.road_kind",
                 "TileStache.Goodies.VecTiles.transform.road_classifier",
                 "TileStache.Goodies.VecTiles.transform.road_sort_key",
-                "TileStache.Goodies.VecTiles.transform.road_trim_properties"
+                "TileStache.Goodies.VecTiles.transform.road_oneway",
+                "TileStache.Goodies.VecTiles.transform.road_trim_properties",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.roads"
         }
@@ -158,11 +162,13 @@
                 "MultiPolygon"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id",
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.building_kind",
                 "TileStache.Goodies.VecTiles.transform.building_height",
                 "TileStache.Goodies.VecTiles.transform.building_min_height",
-                "TileStache.Goodies.VecTiles.transform.building_trim_properties"
+                "TileStache.Goodies.VecTiles.transform.building_trim_properties",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.buildings"
         }
@@ -208,7 +214,9 @@
                 "MultiPoint"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.pois"
         }
@@ -231,27 +239,27 @@
             },
             "queries": [
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z1.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z2.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z3.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z4.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z5.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z5.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z5.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z7.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z8.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z9.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z9.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z9.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z10.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z11.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z12.pgsql"
             ],
             "geometry_types": [
-                "Polygon",
-                "MultiPolygon",
                 "Point",
                 "MultiPoint"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.places"
         }
@@ -295,7 +303,55 @@
                 "MultiPolygon"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.landuse"
+        }
+    }
+},
+    "landuse_labels": {
+    "allowed origin": "*",
+    "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+    "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+    "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+            "dbinfo": {
+                "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+                "port": 5432,
+                "user": "gisuser",
+                "database": "tilestache-gis",
+                "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            },
+            "queries": [
+                null,
+                null,
+                null,
+                null,
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z4.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z4.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z9.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z10.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z11.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z12.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z13.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z14.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z15.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z16.pgsql"
+            ],
+            "geometry_types": [
+                "Point",
+                "MultiPoint"
+            ],
+            "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.landuse"
         }
@@ -332,7 +388,9 @@
                 "MultiPolygon"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.earth"
         }
@@ -378,7 +436,9 @@
                 "MultiLineString"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.water"
         }
