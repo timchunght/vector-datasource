@@ -1,7 +1,7 @@
 SELECT
     name,
     way_area::bigint AS area,
-    COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity") AS kind,
+    COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made") AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}mz_centroid{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -11,6 +11,9 @@ FROM
 WHERE
     mz_is_landuse = TRUE
     AND name IS NOT NULL
+    {% if zoom < 17 %}
+    AND (amenity IS NULL OR amenity != 'parking')
+    {% endif %}
     AND {{ bounds|bbox_filter('way') }}
 
     {% if zoom == 9 %}
