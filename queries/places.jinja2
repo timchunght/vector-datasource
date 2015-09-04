@@ -6,10 +6,11 @@ SELECT
     gid AS __id__,
 
     NULL as admin_level,
-
     scalerank,
     labelrank,
-    pop_max AS population,
+    pop_max::text AS population,
+    NULL AS capital,
+    NULL as state_capital,
     NULL as tags
 
 FROM ne_10m_populated_places
@@ -28,11 +29,11 @@ SELECT
     osm_id AS __id__,
 
     admin_level,
-
     NULL AS scalerank,
     NULL AS labelrank,
-    NULL AS population,
-
+    population,
+    capital,
+    tags->'state_capital' AS state_capital,
     %#tags AS tags
 
 FROM planet_osm_point
@@ -45,7 +46,10 @@ WHERE
         'country'
         {% if zoom >= 3 %}, 'sea'{% endif %}
         {% if zoom >= 4 %}, 'state', 'province'{% endif %}
-        {% if zoom >= 11 %}, 'hamlet', 'village', 'town'{% endif %}
-        {% if zoom >= 12 %}, 'neighbourhood', 'suburb', 'quarter'{% endif %}
+        {% if zoom >= 8 %},  'city', 'town'{% endif %}
+        {% if zoom >= 10 %}, 'borough', 'suburb', 'quarter'{% endif %}
+        {% if zoom >= 11 %}, 'village'{% endif %}
+        {% if zoom >= 12 %}, 'hamlet', 'neighbourhood'{% endif %}
+        {% if zoom >= 13 %}, 'locality', 'isolated_dwelling', 'farm'{% endif %}
     )
     AND {{ bounds|bbox_filter('way') }}
