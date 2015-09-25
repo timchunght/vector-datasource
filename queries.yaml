@@ -9,7 +9,6 @@ all:
   - pois
   - boundaries
   - transit
-  - water_boundaries
 layers:
   water:
     template: water.jinja2
@@ -21,6 +20,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.water_tunnel
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
@@ -53,7 +53,7 @@ layers:
     template: landuse.jinja2
     start_zoom: 4
     geometry_types: [Polygon, MultiPolygon]
-    simplify_start: 9
+    simplify_start: 4
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
@@ -66,7 +66,7 @@ layers:
     sort: TileStache.Goodies.VecTiles.sort.landuse
   landuse_labels:
     template: landuse_labels.jinja2
-    start_zoom: 9
+    start_zoom: 4
     geometry_types: [Point, MultiPoint]
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
@@ -82,7 +82,7 @@ layers:
     template: roads.jinja2
     start_zoom: 5
     geometry_types: [LineString, MultiLineString]
-    simplify_start: 9
+    simplify_start: 8
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
@@ -159,7 +159,7 @@ post_process:
     cutting_layer: landuse
     attribute: kind
     target_attribute: landuse_kind
-    cutting_attrs: { sort_key: 'order', reverse: True }
+    cutting_attrs: { sort_key: 'sort_key', reverse: True }
   TileStache.Goodies.VecTiles.transform.exterior_boundaries:
     base_layer: water
     start_zoom: 9
@@ -173,4 +173,8 @@ post_process:
     cutting_layer: landuse
     attribute: kind
     target_attribute: landuse_kind
-    cutting_attrs: { sort_key: 'order', reverse: True }
+    cutting_attrs: { sort_key: 'sort_key', reverse: True }
+# Temporarily disabled
+#  TileStache.Goodies.VecTiles.transform.intracut:
+#    base_layer: boundaries
+#    attribute: maritime
