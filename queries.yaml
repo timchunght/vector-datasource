@@ -81,6 +81,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.road_oneway
       - TileStache.Goodies.VecTiles.transform.road_abbreviate_name
       - TileStache.Goodies.VecTiles.transform.route_name
+      - TileStache.Goodies.VecTiles.transform.normalize_aerialways
       - TileStache.Goodies.VecTiles.transform.road_trim_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.roads
@@ -99,6 +100,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.building_kind
       - TileStache.Goodies.VecTiles.transform.building_height
       - TileStache.Goodies.VecTiles.transform.building_min_height
+      - TileStache.Goodies.VecTiles.transform.synthesize_volume
       - TileStache.Goodies.VecTiles.transform.building_trim_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.buildings
@@ -144,6 +146,15 @@ layers:
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.transit
 post_process:
+  - fn: TileStache.Goodies.VecTiles.transform.numeric_min_filter
+    params:
+      source_layer: buildings
+      mode: any
+      filters:
+        13: { area: 1600, volume: 300000 }
+        14: { area:  100, volume: 200000 }
+        15: { area:  100, volume: 100000 }
+        16: { area:   25, volume:  50000 }
   - fn: TileStache.Goodies.VecTiles.transform.intercut
     params:
       base_layer: roads
@@ -160,6 +171,7 @@ post_process:
         id: true
         source: true
         boundary: "yes"
+        area: true
       snap_tolerance: 0.125
   - fn: TileStache.Goodies.VecTiles.transform.overlap
     params:
@@ -177,21 +189,10 @@ post_process:
       source_layer: landuse
       label_property_name: label_placement
       label_property_value: "yes"
-  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
-    params:
-      source_layer: landuse
-      new_layer_name: landuse_labels
-      label_property_name: label_placement
-      label_property_value: "yes"
+      drop_keys: [ mz_is_building ]
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: landuse
-      property_keys: [name, kind]
-      geometry_types: [Point]
-      min_distance: 256.0
-  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
-    params:
-      source_layer: landuse_labels
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
@@ -237,3 +238,16 @@ post_process:
       items_matching:
         kind: station
       rank_key: tile_rank
+  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+    params:
+      source_layers: [pois, landuse, buildings]
+      property_keys: [name]
+      geometry_types: [Point]
+      min_distance: 64.0
+  - fn: TileStache.Goodies.VecTiles.transform.copy_features
+    params:
+      source_layer: landuse
+      target_layer: landuse_labels
+      where:
+        label_placement: yes
+      geometry_types: [Point]
