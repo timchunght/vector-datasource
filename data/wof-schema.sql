@@ -1,8 +1,22 @@
-CREATE TABLE wof_neighbourhood (
-  wof_id BIGINT UNIQUE,
-  name TEXT NOT NULL
+CREATE TABLE wof_neighbourhood_placetype (
+  placetype_code SMALLINT PRIMARY KEY,
+  placetype_string text NOT NULL
 );
 
-SELECT AddGeometryColumn ('wof_neighbourhood', 'label_position', 900913, 'POINT', 2);
+INSERT INTO wof_neighbourhood_placetype VALUES
+  (1, 'neighbourhood'),
+  (2, 'microhood'),
+  (3, 'macrohood');
+
+CREATE TABLE wof_neighbourhood (
+  wof_id BIGINT PRIMARY KEY,
+  placetype SMALLINT NOT NULL REFERENCES wof_neighbourhood_placetype(placetype_code),
+  name TEXT NOT NULL,
+  hash TEXT NOT NULL,
+  n_photos INTEGER,
+  area BIGINT,
+  label_position geometry(Point, 900913) NOT NULL,
+  geometry geometry(Geometry, 900913) NOT NULL
+);
 
 CREATE INDEX wof_neighbourhood_label_position_index ON wof_neighbourhood USING GIST(label_position);
