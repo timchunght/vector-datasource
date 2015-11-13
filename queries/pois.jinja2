@@ -2,9 +2,11 @@ SELECT
     name,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    way_area AS area,
     cuisine,
     religion,
     sport,
+    transit_routes,
     %#tags AS tags,
     COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
              "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop",
@@ -17,6 +19,13 @@ FROM (
     osm_id,
     cuisine, religion, sport,
     aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    -- note: the mz_calculate_transit_routes function is pretty expensive,
+    -- so we only want to calculate it when we actually need the result.
+    CASE
+      WHEN railway='station' AND osm_id > 0
+        THEN mz_calculate_transit_routes(osm_id)
+      ELSE NULL::text[]
+    END AS transit_routes,
     tags
 
   FROM
@@ -29,10 +38,11 @@ FROM (
 UNION ALL
 
   SELECT
-    name, mz_centroid AS way, way_area, mz_poi_min_zoom AS min_zoom,
+    name, way, way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
     cuisine, religion, sport,
     aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    NULL AS transit_routes,
     tags
 
   FROM

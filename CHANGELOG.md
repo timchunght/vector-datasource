@@ -1,26 +1,48 @@
+v0.5.0
+------
+* **Release date**: 2015-11-13.
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.1) and [tilequeue v0.5.0](https://github.com/mapzen/tilequeue/releases/tag/v0.5.0) and [TileStache v0.5.0](https://github.com/mapzen/TileStache/releases/tag/v0.5.0)
+* Filter out duplicate POIs in `pois`, `landuse`, and `buildings` layers, preferring poi layer features. Includes density filter.
+* Add neighbourhoods (and macrohoods and microhoods) from Who's On First in the `places` layer. New properties: `min_zoom`, `max_zoom`, `kind_tile_rank`, `is_landuse_aoi`.
+* Remove neighbourhoods from OpenStreetMap.
+* Add `kind_tile_rank` to `kind=station` features to enable filtering out of less important transit stations at low zooms (to reduce crowding). Weights stations that are shown at lower zoom levels by lines going through them. Lower numbers = more important.
+* Stop duplicating building footprints into the landuse layer, and exclude building=no features. Include all building properties at all zooms (was limited to high zooms).
+* Use addr:housename as building name if feature is a POI
+* Add aerialway line features into the `roads` layer.
+* Add back missing roads on park and other landuse boundaries that went missing when `landuse_kind` intercut was added.
+* Add service levels to railroads features in `roads` layer to distinguish importance.
+* Updated High Road classifier (zoom range, sort order) for `service` roads, including pedestrian streets, paths, and forest tracks so they are visible earlier.
+* Add `volume` on `building` layer polygons to enable more sophisticated client-side filtering at mid zooms.
+* Add `city_wall` lines and `barrier` lines to `boundaries` layer.
+* Fix minor bug around missing `water` layer boundary lines.
+* Add `area` to water boundary lines (so filtering of boundary lines can match polygons).
+* Add `townhall`, `laundry`, `dry_cleaner`, and `ferry_terminal` to `pois` layer.
+* Move centroid calculation out of database to post-processing step
+* Updated formats to contain `api_key` parameter in tilejson metadata URL
+
 v0.4.2
 ------
-* **Release date:** 2015-10-14
+* **Release date:** 2015-10-14. _Live in prod: 2015-10-20._
 * Fix invalid Antarctica polygon in buffered land.
 * **Requires:** [tileserver v0.4.0](https://github.com/mapzen/tileserver/releases/tag/v0.4.0) and [tilequeue v0.4.1](https://github.com/mapzen/tilequeue/releases/tag/v0.4.1) and [TileStache v0.4.1](https://github.com/mapzen/TileStache/releases/tag/v0.4.1)
 
 v0.4.1
 ------
-* **Release date:** 2015-10-13
+* **Release date:** 2015-10-13. _Live in prod: 2015-10-20._
 * Create new indexes to speed up query times
 * Reduce `boundaries` query payload size
 * **Requires:** [tileserver v0.4.0](https://github.com/mapzen/tileserver/releases/tag/v0.4.0) and [tilequeue v0.4.1](https://github.com/mapzen/tilequeue/releases/tag/v0.4.1) and [TileStache v0.4.1](https://github.com/mapzen/TileStache/releases/tag/v0.4.1)
 
 v0.4.0
 ------
-* **Release date:** 2015-10-06
+* **Release date:** 2015-10-06. _Live in prod: 2015-10-20._
 * Fix regression in v0.3.0 where zooms 0 to zoom 8 country and region (state, province) features from OpenStreetMap were dropped from tiles (rolling back a change in v0.2.0)
 * Greater diversity of label placements for POIs, landuse, and buildings result in more balanced selection of features visible at mid and high (neighborhood) zooms. The feature's minimum recommended visible zoom is now included as a property (eg: `min_zoom=10.7763`), useful for determining feature priority in client-side label collisions. Currently visibility should be calculated combined with area filters, we'll move that serverside in later releases.
 * Add label positions for water bodies to the `water` layer noted as `label_position=yes`.
 * Add label positions for buildings to the `buildings` layer noted as `label_position=yes`.
 * Landuse label positions are now additionally available in the `landuse` layer directly, noted with `label_position=yes`.
 * **WARNING:** The existing `landuse-labels` layer will be depreciated in a later release.
-* Add `location` and `level` tags to buildings features in the `buildings` layer to determine if something is `location=underground` or `level=-1` (like BART stations in San Francisco).
+* Add `location` and `layer` tags to buildings features in the `buildings` layer to determine if something is `location=underground` or `layer=-1` (like BART stations in San Francisco).
 * Administrative boundary line improvements are back in the `boundaries` layer: now based on OSM relations, includes localized left- and right-names, and adds `maritime_boundary=yes` when the boundary is out in the deep sea. Note that this is slightly different than the `maritime=yes` tag that comes directly from OSM as we're calculating it using a custom spatial mask that will be improved over time.
 * Add `ferry` lines starting at zoom 8 to `road` layer.
 * Add airport `runway` lines starting at zoom 9 in the `roads` layer. Can be combined with `landuse_kind` attributes to throttle visibility.
