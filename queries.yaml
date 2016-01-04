@@ -43,6 +43,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.place_ne_capital
+      - TileStache.Goodies.VecTiles.transform.place_population_int
       - TileStache.Goodies.VecTiles.transform.calculate_default_place_scalerank
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
@@ -110,6 +111,7 @@ layers:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.add_iata_code_to_airports
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
@@ -136,7 +138,7 @@ layers:
   transit:
     template: transit.jinja2
     start_zoom: 6
-    geometry_types: [LineString, MultiLineString]
+    geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
@@ -144,6 +146,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.route_name
+      - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.transit
 post_process:
@@ -264,3 +267,7 @@ post_process:
       where:
         label_placement: yes
       geometry_types: [Point]
+  - fn: TileStache.Goodies.VecTiles.transform.remove_abandoned_pistes
+    params:
+      source_layer: roads
+      start_zoom: 9

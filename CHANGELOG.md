@@ -1,12 +1,44 @@
+v0.6.0
+------
+* **Release date**: 2015-12-14.
+* Highway exits are now present in the `pois` layer, with `kind:motorway_junction` and, if the data is available, properties for `exit_to` directions and `ref` reference number. [Issue](https://github.com/mapzen/vector-datasource/issues/160).
+* Beach polygons are now present in the `landuse` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/366).
+* Military (and rural) `landuse` areas were not being output due to a bug. This has been fixed and both landuse types are now being output. [Issue](https://github.com/mapzen/vector-datasource/issues/367).
+* Railway platforms are now present in the `transit` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/244).
+* Features related to winter sports are now present; with pistes in the `roads` layer as `kind:piste`, winter sports areas / resorts in the `landuse` layer with `kind:winter_sports` and various `pois` related to ski/snowboard hire available in the `pois` layer. [Pistes ticket](https://github.com/mapzen/vector-datasource/issues/342). [Areas ticket](https://github.com/mapzen/vector-datasource/issues/343), [POIs ticket](https://github.com/mapzen/vector-datasource/issues/344).
+* IATA codes are included as the `iata` property on airports for which the data is available in the `pois` and `landuse` layers. [Issue](https://github.com/mapzen/vector-datasource/issues/398).
+* Pier lines are now included in the `roads` layer with `kind:path, man_made:pier`. [Issue](https://github.com/mapzen/vector-datasource/issues/382).
+* Subway stations show at zoom 12 in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/369).
+* Zoos now show up by zoom 13 at the latest in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/421).
+* Ice cream shops and stands are now included in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/447)
+* Toy shops are now included in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/404).
+* Wine shops are now included in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/448)
+* Alcohol shops are now included in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/448)
+* The `population` attribute in the `places` layer is now always an integer. [Issue](https://github.com/mapzen/vector-datasource/issues/230).
+* **Requires:** [tileserver v0.5.0](https://github.com/mapzen/tileserver/releases/tag/v0.5.0) and [tilequeue v0.6.0](https://github.com/mapzen/tilequeue/releases/tag/v0.6.0) and [TileStache v0.6.0](https://github.com/mapzen/TileStache/releases/tag/v0.6.0)
+
+v0.5.3
+------
+* **Release date**: 2015-12-07. _Live in prod: 2015-12-07._
+* Fix bug where school points were not being exported as POIs. [Issue](https://github.com/mapzen/vector-datasource/issues/417).
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.2) and [tilequeue v0.5.1](https://github.com/mapzen/tilequeue/releases/tag/v0.5.1) and [TileStache v0.5.1](https://github.com/mapzen/TileStache/releases/tag/v0.5.1)
+
+v0.5.2
+------
+* **Release date**: 2015-12-04. _Live in prod: 2015-12-04._
+* Make hospital POIs visible at zoom 14 by default, instead of 15. [Issue](https://github.com/mapzen/vector-datasource/issues/420).
+* Fix regression which dropped parking aisles. [Issue](https://github.com/mapzen/vector-datasource/issues/412).
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.2) and [tilequeue v0.5.1](https://github.com/mapzen/tilequeue/releases/tag/v0.5.1) and [TileStache v0.5.1](https://github.com/mapzen/TileStache/releases/tag/v0.5.1)
+
 v0.5.1
 ------
 * **Release date**: 2015-11-24. _Live in prod: 2015-11-24._
 * Update landuse query to use existing index
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.2) and [tilequeue v0.5.1](https://github.com/mapzen/tilequeue/releases/tag/v0.5.1) and [TileStache v0.5.1](https://github.com/mapzen/TileStache/releases/tag/v0.5.1)
 
 v0.5.0
 ------
 * **Release date**: 2015-11-13. _Live in prod: 2015-11-20._
-* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.1) and [tilequeue v0.5.0](https://github.com/mapzen/tilequeue/releases/tag/v0.5.0) and [TileStache v0.5.0](https://github.com/mapzen/TileStache/releases/tag/v0.5.0)
 * Filter out duplicate POIs in `pois`, `landuse`, and `buildings` layers, preferring poi layer features. Includes density filter.
 * Add neighbourhoods (and macrohoods and microhoods) from Who's On First in the `places` layer. New properties: `min_zoom`, `max_zoom`, `kind_tile_rank`, `is_landuse_aoi`.
 * Remove neighbourhoods from OpenStreetMap.
@@ -24,6 +56,7 @@ v0.5.0
 * Add `townhall`, `laundry`, `dry_cleaner`, and `ferry_terminal` to `pois` layer.
 * Move centroid calculation out of database to post-processing step
 * Updated formats to contain `api_key` parameter in tilejson metadata URL
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.1) and [tilequeue v0.5.0](https://github.com/mapzen/tilequeue/releases/tag/v0.5.0) and [TileStache v0.5.0](https://github.com/mapzen/TileStache/releases/tag/v0.5.0)
 
 v0.4.2
 ------
