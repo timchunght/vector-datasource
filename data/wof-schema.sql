@@ -18,6 +18,9 @@ CREATE TABLE wof_neighbourhood (
   min_zoom SMALLINT NOT NULL,
   max_zoom SMALLINT NOT NULL,
   is_landuse_aoi BOOLEAN,
+  inception DATE NOT NULL DEFAULT '0001-01-01',
+  cessation DATE NOT NULL DEFAULT '9999-12-31',
+  is_visible BOOLEAN NOT NULL DEFAULT true,
   label_position geometry(Point, 900913) NOT NULL,
   geometry geometry(Geometry, 900913) NOT NULL
 );
