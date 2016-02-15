@@ -19,8 +19,8 @@ psql $@ -f apply-updates-non-planet-tables.sql &
 wait
 echo "done."
 
-echo -e '\nApplying triggers...'
-psql $@ -f triggers.sql
-echo 'done.'
+#echo -e '\nApplying triggers...'
+#psql $@ -f triggers.sql
+#echo 'done.'
 
 echo -e "\nAll updates complete. Exiting."
